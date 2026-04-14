@@ -34,11 +34,16 @@ const {
       type={type}
       canonicalURL={canonicalURL}
     />
-    <JsonLd pageType={pageType} title={title} description={description} url={canonicalURL ?? Astro.url.href} />
+    <JsonLd
+      pageType={pageType}
+      title={title}
+      description={description}
+      url={canonicalURL ?? Astro.url.href}
+    />
   </head>
-  <body class="min-h-screen flex flex-col">
+  <body>
     <Header />
-    <main class="flex-1">
+    <main>
       <slot />
     </main>
     <Footer />

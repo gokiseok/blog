@@ -5,8 +5,9 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import JsonLd from '../components/JsonLd.astro';
 import PostCard from '../components/PostCard.astro';
-import { CATEGORY_LABELS } from '../content/config';
-import type { CategorySlug } from '../content/config';
+import { CATEGORY_CONFIG } from '../utils/categories';
+import type { CategorySlug } from '../utils/categories';
+import { getReadingTime } from '../utils/reading-time';
 import { getCollection } from 'astro:content';
 import '../styles/global.css';
 
@@ -19,6 +20,7 @@ interface Props {
   category: CategorySlug;
   tags: string[];
   schemaType: 'Article' | 'Restaurant' | 'HowTo' | 'FAQPage';
+  body: string;
 }
 
 const {
@@ -30,10 +32,12 @@ const {
   category,
   tags,
   schemaType,
+  body,
 } = Astro.props;
 
-const categoryLabel = CATEGORY_LABELS[category];
+const catConfig = CATEGORY_CONFIG[category];
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const readingTime = getReadingTime(body);
 
 // 관련 글 (같은 카테고리, 최신 2개)
 const allPosts = await getCollection('posts', ({ data }) => !data.draft);
@@ -65,82 +69,116 @@ const relatedPosts = allPosts
       schemaType={schemaType}
     />
   </head>
-  <body class="min-h-screen flex flex-col">
+  <body>
     <Header />
-    <main class="flex-1">
-      <article class="max-w-prose mx-auto px-4 sm:px-6 py-12">
-        <!-- 카테고리 & 날짜 -->
-        <div class="flex items-center gap-2 mb-4 text-sm">
+    <main>
+      <article>
+        <!-- 글 헤더 -->
+        <div class="max-w-reading mx-auto px-5 md:px-0 pt-20 md:pt-28">
+
+          <!-- 카테고리 뱃지 -->
           <a
             href={`/categories/${category}`}
-            class="text-orange-600 bg-orange-50 px-2 py-1 rounded font-medium no-underline hover:bg-orange-100"
+            class="cat-badge no-underline block mb-6"
+            style={`color: ${catConfig.color}`}
           >
-            {categoryLabel}
+            {catConfig.label}
           </a>
-          <span class="text-gray-400">
-            <FormattedDate date={pubDate} />
-          </span>
-          {updatedDate && (
-            <span class="text-gray-400 text-xs">
-              (수정: <FormattedDate date={updatedDate} />)
-            </span>
-          )}
+
+          <!-- 제목 (명조) -->
+          <h1 class="font-serif font-bold text-[28px] md:text-[40px] text-black leading-[1.4] tracking-[-0.02em] mb-5">
+            {title}
+          </h1>
+
+          <!-- description -->
+          <p class="font-sans text-[18px] text-ink-sub leading-[1.7] mb-10">
+            {description}
+          </p>
+
+          <!-- 저자·날짜·읽기시간 -->
+          <div class="flex items-center gap-3 mb-10">
+            <!-- 이니셜 원 -->
+            <div
+              class="flex-none w-8 h-8 rounded-full flex items-center justify-center font-serif font-bold text-[14px] text-white"
+              style="background: #C2410C;"
+              aria-hidden="true"
+            >
+              고
+            </div>
+            <div class="flex items-center gap-2 font-sans text-[14px] text-ink-sub flex-wrap">
+              <span class="font-medium text-ink">고기석</span>
+              <span class="text-ink-muted">·</span>
+              <FormattedDate date={pubDate} />
+              {updatedDate && (
+                <>
+                  <span class="text-ink-muted">·</span>
+                  <span>수정 <FormattedDate date={updatedDate} /></span>
+                </>
+              )}
+              <span class="text-ink-muted">·</span>
+              <span>{readingTime}</span>
+            </div>
+          </div>
+
+          <!-- 상단 구분선 -->
+          <hr class="divider mb-10" />
         </div>
 
-        <!-- 제목 -->
-        <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-4">
-          {title}
-        </h1>
-
-        <!-- 설명 -->
-        <p class="text-gray-500 text-lg leading-relaxed mb-6">
-          {description}
-        </p>
-
-        <!-- 태그 -->
-        <div class="flex flex-wrap gap-1 mb-8 pb-8 border-b border-gray-200">
-          {tags.map((tag) => (
-            <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-              #{tag}
-            </span>
-          ))}
-        </div>
-
-        <!-- 히어로 이미지 -->
+        <!-- 히어로 이미지 (있을 때만) -->
         {heroImage && (
-          <img
-            src={heroImage}
-            alt={title}
-            class="w-full rounded-lg mb-8 object-cover aspect-video"
-          />
+          <div class="max-w-reading mx-auto px-5 md:px-0 mb-10">
+            <img
+              src={heroImage}
+              alt={title}
+              class="w-full"
+              style="border-radius:0;"
+            />
+          </div>
         )}
 
         <!-- 본문 -->
-        <div class="prose max-w-none">
-          <slot />
-        </div>
-
-        <!-- 저자 카드 -->
-        <div class="mt-12 pt-8 border-t border-gray-200">
-          <div class="flex items-start gap-4 p-6 bg-gray-50 rounded-lg">
-            <div class="flex-1">
-              <p class="font-bold text-gray-900 mb-1">고기석 블로그</p>
-              <p class="text-sm text-gray-600 leading-relaxed">
-                건대입구역 통갈매기살 전문점 고기석 건대본점을 운영하면서 AI 자동화와 데이터 분석을 씁니다.
-              </p>
-              <div class="flex gap-3 mt-2">
-                <a href="/about" class="text-xs text-orange-600 hover:text-orange-700 no-underline">블로그 소개</a>
-                <a href="https://bbq.gokiseok.com" target="_blank" rel="noopener noreferrer" class="text-xs text-orange-600 hover:text-orange-700 no-underline">고기석 건대본점</a>
-              </div>
-            </div>
+        <div class="max-w-reading mx-auto px-5 md:px-0 pb-20">
+          <div class="prose">
+            <slot />
           </div>
         </div>
 
-        <!-- 관련 글 -->
-        {relatedPosts.length > 0 && (
-          <div class="mt-10">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">관련 글</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- 글 하단 -->
+        <div class="max-w-reading mx-auto px-5 md:px-0">
+          <hr class="divider mb-10" />
+
+          <!-- 저자 섹션 -->
+          <div class="flex items-start gap-4 mb-10">
+            <div
+              class="flex-none w-12 h-12 rounded-full flex items-center justify-center font-serif font-bold text-[18px] text-white"
+              style="background: #C2410C;"
+              aria-hidden="true"
+            >
+              고
+            </div>
+            <div>
+              <p class="font-serif font-bold text-[18px] text-black mb-1">고기석</p>
+              <p class="font-sans text-[14px] text-ink-sub leading-relaxed mb-2">
+                건대 통갈매기살 전문점 '고기석 건대본점' 대표
+              </p>
+              <a
+                href="https://bbq.gokiseok.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-sans font-medium text-[14px] text-accent no-underline hover:underline"
+              >
+                매장 방문하기 →
+              </a>
+            </div>
+          </div>
+
+          <!-- 관련 글 -->
+          {relatedPosts.length > 0 && (
+            <div class="mt-4">
+              <hr class="divider mb-10" />
+              <h3 class="font-serif font-bold text-[18px] text-black mb-0">
+                이 글과 함께 읽어보세요
+              </h3>
               {relatedPosts.map((post) => (
                 <PostCard
                   title={post.data.title}
@@ -149,11 +187,12 @@ const relatedPosts = allPosts
                   slug={post.id.replace(/\.mdx?$/, '')}
                   category={post.data.category}
                   tags={post.data.tags}
+                  readingTime={getReadingTime(post.body)}
                 />
               ))}
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </article>
     </main>
     <Footer />

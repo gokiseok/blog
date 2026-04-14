@@ -2,16 +2,17 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
-import { CATEGORY_LABELS } from '../../content/config';
-import type { CategorySlug } from '../../content/config';
+import { CATEGORY_CONFIG } from '../../utils/categories';
+import type { CategorySlug } from '../../utils/categories';
+import { getReadingTime } from '../../utils/reading-time';
 
 export async function getStaticPaths() {
-  const slugs = Object.keys(CATEGORY_LABELS) as CategorySlug[];
+  const slugs = Object.keys(CATEGORY_CONFIG) as CategorySlug[];
   return slugs.map((category) => ({ params: { category } }));
 }
 
 const { category } = Astro.params as { category: CategorySlug };
-const categoryLabel = CATEGORY_LABELS[category];
+const config = CATEGORY_CONFIG[category];
 
 const allPosts = await getCollection('posts', ({ data }) => !data.draft);
 const posts = allPosts
@@ -20,19 +21,31 @@ const posts = allPosts
 ---
 
 <BaseLayout
-  title={`${categoryLabel} - 고기석 블로그`}
-  description={`${categoryLabel} 카테고리의 모든 글 목록입니다. 고기석 블로그.`}
+  title={`${config.label} - 고기석 블로그`}
+  description={`${config.label}: ${config.description}. 고기석 블로그.`}
   pageType="category"
 >
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-    <div class="mb-8">
-      <a href="/posts" class="text-sm text-gray-500 hover:text-gray-700 no-underline">← 전체 글</a>
-      <h1 class="text-3xl font-bold text-gray-900 mt-2 mb-1">{categoryLabel}</h1>
-      <p class="text-gray-500">총 {posts.length}편</p>
-    </div>
+  <div class="max-w-reading mx-auto px-5 md:px-0 pt-24 md:pt-32 pb-4">
 
+    <!-- 카테고리 헤더 -->
+    <h1
+      class="font-serif font-bold text-[40px] md:text-[52px] leading-tight tracking-[-0.02em] mb-4"
+      style={`color: ${config.color}`}
+    >
+      {config.label}
+    </h1>
+    <p class="font-sans text-[17px] text-ink-sub leading-relaxed mb-3">
+      {config.description}
+    </p>
+    <p class="font-sans text-[14px] text-ink-muted mb-10">
+      총 {posts.length}개의 글
+    </p>
+
+    <hr class="divider mb-0" />
+
+    <!-- 글 목록 -->
     {posts.length > 0 ? (
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div>
         {posts.map((post) => (
           <PostCard
             title={post.data.title}
@@ -41,11 +54,12 @@ const posts = allPosts
             slug={post.id.replace(/\.mdx?$/, '')}
             category={post.data.category}
             tags={post.data.tags}
+            readingTime={getReadingTime(post.body)}
           />
         ))}
       </div>
     ) : (
-      <p class="text-gray-500 text-center py-20">이 카테고리에 아직 글이 없습니다.</p>
+      <p class="font-sans text-[15px] text-ink-sub py-12">이 카테고리에 아직 글이 없습니다.</p>
     )}
   </div>
 </BaseLayout>

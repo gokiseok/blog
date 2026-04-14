@@ -1,7 +1,7 @@
 ---
 import FormattedDate from './FormattedDate.astro';
-import { CATEGORY_LABELS } from '../content/config';
-import type { CategorySlug } from '../content/config';
+import { CATEGORY_CONFIG } from '../utils/categories';
+import type { CategorySlug } from '../utils/categories';
 
 interface Props {
   title: string;
@@ -10,34 +10,50 @@ interface Props {
   slug: string;
   category: CategorySlug;
   tags: string[];
+  readingTime?: string;
 }
 
-const { title, description, pubDate, slug, category, tags } = Astro.props;
-const categoryLabel = CATEGORY_LABELS[category];
+const { title, description, pubDate, slug, category, tags, readingTime } = Astro.props;
+const config = CATEGORY_CONFIG[category];
 ---
 
-<article class="border border-gray-200 rounded-lg p-6 hover:border-orange-300 hover:shadow-md transition-all duration-200 bg-white">
+<article class="post-item">
+  <!-- 카테고리·날짜 -->
   <div class="flex items-center gap-2 mb-3">
-    <span class="text-xs font-medium text-orange-600 bg-orange-50 px-2 py-1 rounded">
-      {categoryLabel}
-    </span>
-    <span class="text-xs text-gray-400">
+    <a
+      href={`/categories/${category}`}
+      class="cat-badge no-underline"
+      style={`color: ${config.color}`}
+    >
+      {config.label}
+    </a>
+    <span class="text-ink-muted text-[13px]">·</span>
+    <span class="font-sans text-[13px] text-ink-muted">
       <FormattedDate date={pubDate} />
     </span>
   </div>
-  <h2 class="text-lg font-bold text-gray-900 mb-2 leading-tight">
-    <a href={`/posts/${slug.replace(/\.mdx?$/, '')}`} class="hover:text-orange-600 no-underline text-gray-900">
+
+  <!-- 제목 -->
+  <h2 class="font-serif font-bold text-[22px] md:text-[24px] text-black leading-snug tracking-[-0.02em] mb-2">
+    <a
+      href={`/posts/${slug}`}
+      class="no-underline text-black hover:text-accent"
+      style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"
+    >
       {title}
     </a>
   </h2>
-  <p class="text-sm text-gray-600 leading-relaxed line-clamp-2 mb-3">
+
+  <!-- 설명 -->
+  <p
+    class="font-sans text-[15px] text-ink-sub leading-relaxed mb-3"
+    style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"
+  >
     {description}
   </p>
-  <div class="flex flex-wrap gap-1">
-    {tags.slice(0, 3).map((tag) => (
-      <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-        #{tag}
-      </span>
-    ))}
-  </div>
+
+  <!-- 읽기 시간 -->
+  {readingTime && (
+    <p class="font-sans text-[13px] text-ink-muted">{readingTime}</p>
+  )}
 </article>

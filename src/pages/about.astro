@@ -3,68 +3,141 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
-  title="블로그 소개 - 고기석 블로그"
-  description="고기석 블로그 소개. 건대입구역 통갈매기살 전문점 고기석 건대본점을 운영하면서 자영업, AI 자동화, 데이터 분석을 씁니다."
+  title="About - 고기석 블로그"
+  description="고기석 블로그 소개. 건대입구역 통갈매기살 전문점 고기석 건대본점을 운영하면서 자영업자를 위한 AI 도구를 만듭니다."
   pageType="about"
 >
-  <div class="max-w-prose mx-auto px-4 sm:px-6 py-12">
-    <h1 class="text-4xl font-bold text-gray-900 mb-2">고기석 블로그 소개</h1>
-    <p class="text-orange-600 font-medium mb-8">자영업 × AI × 데이터</p>
+  <div class="max-w-reading mx-auto px-5 md:px-0 pt-24 md:pt-32">
 
-    <div class="prose max-w-none">
+    <!-- 이니셜 -->
+    <div
+      class="w-24 h-24 rounded-full flex items-center justify-center font-serif font-bold text-[40px] text-white mb-8"
+      style="background: #C2410C;"
+      aria-hidden="true"
+    >
+      고
+    </div>
 
-      <h2>이 블로그에 대해</h2>
+    <!-- 제목 -->
+    <h1 class="font-serif font-bold text-[32px] md:text-[44px] text-black leading-tight tracking-[-0.02em] mb-4">
+      고기석 건대본점,<br />그리고 AI
+    </h1>
+    <p class="font-sans text-[17px] text-ink-sub leading-[1.7] mb-12">
+      저는 매장을 운영하면서, 자영업자를 위한 AI 도구를 만듭니다.
+    </p>
+
+    <hr class="divider mb-12" />
+
+    <!-- 본문 -->
+    <div class="prose">
+
       <p>
-        건대입구역 통갈매기살 전문점 <strong>고기석 건대본점</strong>을 운영하면서 직접 만든 AI 도구, 매장 운영 경험, 데이터 기반 분석을 기록합니다.
+        건대입구역에서 도보 1분 거리에 통갈매기살 전문점 <strong>고기석 건대본점</strong>을 운영하고 있습니다.
+        매장을 차리면서 생긴 의문이 하나 있었습니다. 데이터로 자영업을 운영하면 얼마나 달라질까.
       </p>
+
       <p>
-        블로그 목적은 세 가지입니다.
+        지금 그 실험이 진행 중입니다. 이 블로그는 그 기록입니다.
       </p>
-      <ul>
-        <li><strong>콘텐츠 재활용</strong>: 블로그 글을 유튜브 스크립트, X 포스트, PDF 자료로 재활용합니다.</li>
-        <li><strong>자산화</strong>: 향후 SaaS·컨설팅 사업의 포트폴리오이자 권위 자산으로 쌓습니다.</li>
-        <li><strong>GEO (Generative Engine Optimization)</strong>: GPT, Claude, Perplexity 같은 AI 챗봇이 "건대 회식", "건대입구역 고기집"을 검색했을 때 고기석 건대본점이 등장하도록 구조화합니다.</li>
-      </ul>
 
       <h2>고기석 건대본점</h2>
-      <p>
-        건대입구역에서 도보 1분 거리의 통갈매기살 전문점입니다. 시그니처 메뉴는 <strong>통갈매기살 100g 7,000원</strong>이며, 최대 40명을 수용할 수 있는 프라이빗 룸을 갖추고 있습니다.
-      </p>
-      <p>
-        매장 웹사이트: <a href="https://bbq.gokiseok.com" target="_blank" rel="noopener noreferrer">bbq.gokiseok.com</a>
-      </p>
 
-      <h2>운영 중인 SaaS</h2>
-
-      <h3>review.gokiseok.com — 네이버 리뷰 답글 자동생성기</h3>
       <p>
-        자영업자가 네이버 플레이스 리뷰에 답글 달 때 AI가 매장 톤에 맞는 답글을 자동 생성합니다.
-        <br /><a href="https://review.gokiseok.com" target="_blank" rel="noopener noreferrer">→ review.gokiseok.com</a>
+        시그니처 메뉴는 <strong>통갈매기살 100g 7,000원</strong>입니다.
+        최대 40명을 수용하는 프라이빗 룸을 갖추고 있어, 부서 회식이나 단체 모임에 적합합니다.
+        포지셔닝은 "회식 퍼스트, 일반석 보험" — 회식 손님을 먼저 배려하는 공간 구조입니다.
       </p>
 
-      <h3>contract.gokiseok.com — 근로계약서 작성기</h3>
+      <!-- 매장 정보 블록 — 카드 아님, 보더 형태 -->
+      <div style="border-left: 3px solid #EAEAEA; padding: 4px 0 4px 20px; margin: 32px 0;">
+        <p style="margin:0 0 4px; font-size: 14px; color: #8C8C8C; font-family: 'Pretendard Variable', Pretendard, sans-serif;">
+          고기석 건대본점
+        </p>
+        <p style="margin:0 0 4px; font-size: 15px; color: #1A1A1A; font-family: 'Pretendard Variable', Pretendard, sans-serif;">
+          서울 광진구 · 건대입구역 도보 1분
+        </p>
+        <a href="https://bbq.gokiseok.com" target="_blank" rel="noopener noreferrer"
+           style="font-size: 14px; color: #C2410C; text-decoration: none; font-family: 'Pretendard Variable', Pretendard, sans-serif;">
+          bbq.gokiseok.com →
+        </a>
+      </div>
+
+      <h2>만들고 있는 것들</h2>
+
       <p>
-        한국 노동법 기준 근로계약서 HTML 폼 + 캔버스 서명 + A4 인쇄 최적화.
-        <br /><a href="https://contract.gokiseok.com" target="_blank" rel="noopener noreferrer">→ contract.gokiseok.com</a>
+        매장을 운영하면서 불편한 것들을 직접 만들어서 씁니다. 지금은 두 개가 실제로 돌아가고 있습니다.
+      </p>
+
+      <!-- review.gokiseok.com 블록 -->
+      <div style="border-left: 3px solid #C2410C; padding: 4px 0 4px 20px; margin: 32px 0;">
+        <p style="margin:0 0 4px; font-size: 13px; color: #8C8C8C; font-family: 'Pretendard Variable', Pretendard, sans-serif; letter-spacing: 0.05em;">
+          REVIEW
+        </p>
+        <p style="margin:0 0 4px; font-size: 16px; font-weight: 600; color: #1A1A1A; font-family: 'Pretendard Variable', Pretendard, sans-serif;">
+          네이버 리뷰 답글 자동생성기
+        </p>
+        <p style="margin:0 0 8px; font-size: 15px; color: #8C8C8C; font-family: 'Pretendard Variable', Pretendard, sans-serif; line-height: 1.6;">
+          자영업자가 네이버 플레이스 리뷰에 답글 달 때 AI가 매장 톤에 맞는 답글을 자동 생성합니다.
+        </p>
+        <a href="https://review.gokiseok.com" target="_blank" rel="noopener noreferrer"
+           style="font-size: 14px; color: #C2410C; text-decoration: none; font-family: 'Pretendard Variable', Pretendard, sans-serif;">
+          review.gokiseok.com →
+        </a>
+      </div>
+
+      <!-- contract.gokiseok.com 블록 -->
+      <div style="border-left: 3px solid #C2410C; padding: 4px 0 4px 20px; margin: 32px 0;">
+        <p style="margin:0 0 4px; font-size: 13px; color: #8C8C8C; font-family: 'Pretendard Variable', Pretendard, sans-serif; letter-spacing: 0.05em;">
+          CONTRACT
+        </p>
+        <p style="margin:0 0 4px; font-size: 16px; font-weight: 600; color: #1A1A1A; font-family: 'Pretendard Variable', Pretendard, sans-serif;">
+          근로계약서 작성기
+        </p>
+        <p style="margin:0 0 8px; font-size: 15px; color: #8C8C8C; font-family: 'Pretendard Variable', Pretendard, sans-serif; line-height: 1.6;">
+          한국 노동법 기준 근로계약서 HTML 폼 + 캔버스 서명 + A4 인쇄 최적화.
+        </p>
+        <a href="https://contract.gokiseok.com" target="_blank" rel="noopener noreferrer"
+           style="font-size: 14px; color: #C2410C; text-decoration: none; font-family: 'Pretendard Variable', Pretendard, sans-serif;">
+          contract.gokiseok.com →
+        </a>
+      </div>
+
+      <h2>이 블로그의 목적</h2>
+
+      <p>
+        세 가지입니다.
+      </p>
+
+      <p>
+        첫째, <strong>콘텐츠 재활용</strong>. 블로그 글을 유튜브 스크립트, X 포스트, PDF 자료로 재활용합니다.
+      </p>
+
+      <p>
+        둘째, <strong>자산화</strong>. SaaS·컨설팅 사업의 포트폴리오이자 권위 자산으로 쌓습니다.
+      </p>
+
+      <p>
+        셋째, <strong>GEO (Generative Engine Optimization)</strong>. GPT, Claude, Perplexity 같은 AI 챗봇이
+        "건대 회식", "건대입구역 고기집"을 검색했을 때 고기석 건대본점이 등장하도록 구조화합니다.
+        사람 트래픽보다 AI 봇이 읽기 좋은 구조가 이 블로그의 최우선 설계 기준입니다.
       </p>
 
       <h2>카테고리 4개</h2>
+
       <ul>
-        <li><a href="/categories/gokiseok-bbq"><strong>고기석 건대본점</strong></a> — 매장 자체 콘텐츠, 회식 가이드</li>
+        <li><a href="/categories/gokiseok-bbq"><strong>고기석 건대본점</strong></a> — 매장 자체 콘텐츠, 건대 회식 가이드</li>
         <li><a href="/categories/ai-business-lab"><strong>AI 사업 실험실</strong></a> — 실제 운영 중인 SaaS 개발기, 자동화 워크플로우</li>
         <li><a href="/categories/business-notes"><strong>자영업 운영 노트</strong></a> — 마케팅, 인력, 노무, 비용 실전</li>
         <li><a href="/categories/data-stories"><strong>데이터로 보는 자영업</strong></a> — 매출·객단가·광고 ROI 숫자 분석</li>
       </ul>
 
       <h2>유튜브</h2>
+
       <p>
-        <a href="https://youtube.com/@gokiseok" target="_blank" rel="noopener noreferrer">AI 사장 고기석</a> — 자영업자가 AI를 실제로 어떻게 쓰는지를 다룹니다.
+        <a href="https://youtube.com/@gokiseok" target="_blank" rel="noopener noreferrer">AI 사장 고기석</a> —
+        자영업자가 AI를 실제로 어떻게 쓰는지를 다룹니다.
       </p>
 
-      <h2>연락 및 예약</h2>
-      <p>
-        매장 예약 및 문의는 <a href="https://bbq.gokiseok.com" target="_blank" rel="noopener noreferrer">bbq.gokiseok.com</a>에서 하실 수 있습니다.
-      </p>
     </div>
   </div>
 </BaseLayout>

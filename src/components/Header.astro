@@ -1,84 +1,123 @@
 ---
-import { CATEGORY_LABELS } from '../content/config';
+import { CATEGORY_CONFIG } from '../utils/categories';
 
-const categories = Object.entries(CATEGORY_LABELS) as [string, string][];
+const categories = Object.entries(CATEGORY_CONFIG);
 const currentPath = Astro.url.pathname;
+
+function isActive(slug: string) {
+  return currentPath.includes(slug);
+}
 ---
 
-<header class="border-b border-gray-200 bg-white sticky top-0 z-50">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<header class="bg-white border-b border-[#EAEAEA]">
+  <div class="max-w-site mx-auto px-5 md:px-10">
     <div class="flex items-center justify-between h-16">
-      <!-- Logo -->
-      <a href="/" class="flex items-center no-underline">
-        <img
-          src="/images/gokiseok-logo.png"
-          alt="고기석 블로그"
-          class="h-9 w-auto"
-        />
+
+      <!-- 로고 -->
+      <a href="/" class="flex items-baseline gap-2 no-underline group">
+        <span class="font-serif font-bold text-[22px] text-black tracking-[-0.02em] leading-none">
+          고기석
+        </span>
+        <span class="font-sans font-medium text-[11px] text-ink-sub uppercase tracking-[0.15em] leading-none">
+          blog
+        </span>
       </a>
 
-      <!-- Desktop nav -->
-      <nav class="hidden md:flex items-center gap-1">
-        {categories.map(([slug, label]) => (
+      <!-- 데스크탑 메뉴 -->
+      <nav class="hidden md:flex items-center gap-6">
+        {categories.map(([slug, config]) => (
           <a
             href={`/categories/${slug}`}
-            class={`px-3 py-2 text-sm rounded-md transition-colors no-underline ${
-              currentPath.includes(slug)
-                ? 'text-orange-600 bg-orange-50 font-medium'
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+            class={`font-sans font-medium text-[14px] no-underline relative pb-0.5 ${
+              isActive(slug)
+                ? 'text-black after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-accent'
+                : 'text-ink-sub hover:text-black'
             }`}
           >
-            {label}
+            {config.label}
           </a>
         ))}
         <a
           href="/about"
-          class={`px-3 py-2 text-sm rounded-md transition-colors no-underline ${
-            currentPath === '/about'
-              ? 'text-orange-600 bg-orange-50 font-medium'
-              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+          class={`font-sans font-medium text-[14px] no-underline relative pb-0.5 ${
+            currentPath === '/about' || currentPath === '/about/'
+              ? 'text-black after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-accent'
+              : 'text-ink-sub hover:text-black'
           }`}
         >
           About
         </a>
       </nav>
 
-      <!-- Mobile menu button -->
+      <!-- 모바일 햄버거 -->
       <button
-        id="mobile-menu-btn"
-        class="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+        id="mobile-open"
+        class="md:hidden p-2 text-ink-sub hover:text-black"
         aria-label="메뉴 열기"
+        style="min-height:44px;min-width:44px;"
       >
-        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <line x1="2" y1="6" x2="20" y2="6"/>
+          <line x1="2" y1="11" x2="20" y2="11"/>
+          <line x1="2" y1="16" x2="20" y2="16"/>
         </svg>
       </button>
-    </div>
-
-    <!-- Mobile nav -->
-    <div id="mobile-menu" class="hidden md:hidden pb-4">
-      {categories.map(([slug, label]) => (
-        <a
-          href={`/categories/${slug}`}
-          class="block px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md no-underline"
-        >
-          {label}
-        </a>
-      ))}
-      <a
-        href="/about"
-        class="block px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md no-underline"
-      >
-        About
-      </a>
     </div>
   </div>
 </header>
 
+<!-- 모바일 풀스크린 오버레이 -->
+<div
+  id="mobile-menu"
+  class="fixed inset-0 bg-white z-50 flex flex-col px-8 py-10 hidden"
+  aria-hidden="true"
+>
+  <div class="flex justify-between items-center mb-12">
+    <span class="font-serif font-bold text-[22px] text-black tracking-[-0.02em]">고기석</span>
+    <button
+      id="mobile-close"
+      class="p-2 text-ink-sub hover:text-black"
+      aria-label="메뉴 닫기"
+      style="min-height:44px;min-width:44px;"
+    >
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <line x1="4" y1="4" x2="18" y2="18"/>
+        <line x1="18" y1="4" x2="4" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="flex flex-col gap-8">
+    {categories.map(([slug, config]) => (
+      <a
+        href={`/categories/${slug}`}
+        class="font-serif font-bold text-[24px] text-black no-underline hover:text-accent"
+      >
+        {config.label}
+      </a>
+    ))}
+    <a
+      href="/about"
+      class="font-serif font-bold text-[24px] text-black no-underline hover:text-accent"
+    >
+      About
+    </a>
+  </nav>
+</div>
+
 <script>
-  const btn = document.getElementById('mobile-menu-btn');
+  const openBtn = document.getElementById('mobile-open');
+  const closeBtn = document.getElementById('mobile-close');
   const menu = document.getElementById('mobile-menu');
-  btn?.addEventListener('click', () => {
-    menu?.classList.toggle('hidden');
+
+  openBtn?.addEventListener('click', () => {
+    menu?.classList.remove('hidden');
+    menu?.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  });
+
+  closeBtn?.addEventListener('click', () => {
+    menu?.classList.add('hidden');
+    menu?.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
   });
 </script>

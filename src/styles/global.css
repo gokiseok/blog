@@ -1,86 +1,224 @@
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+/* ── 웹폰트 ── */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ── 베이스 ── */
 @layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
   html {
-    font-family: 'Pretendard', system-ui, sans-serif;
+    font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color: #1A1A1A;
+    background: #fff;
   }
 
   body {
-    @apply text-gray-900 bg-white;
+    margin: 0;
+    min-height: 100vh;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-bold tracking-tight;
+  /* 전환 기본 150ms */
+  a, button {
+    transition: color 150ms ease, opacity 150ms ease, text-decoration-color 150ms ease;
   }
 
-  a {
-    @apply text-orange-600 hover:text-orange-700 transition-colors;
+  /* 포커스 링 */
+  :focus-visible {
+    outline: 2px solid #C2410C;
+    outline-offset: 2px;
+  }
+}
+
+/* ── 공통 유틸 ── */
+@layer components {
+  /* 카테고리 뱃지 — 배경 없는 텍스트만 */
+  .cat-badge {
+    font-family: 'Pretendard Variable', Pretendard, sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
 
-  /* Prose styles for blog posts */
-  .prose h2 {
-    @apply text-2xl font-bold mt-10 mb-4 text-gray-900;
+  /* 글 리스트 아이템 */
+  .post-item {
+    padding: 40px 0;
+    border-bottom: 1px solid #EAEAEA;
+  }
+  .post-item:first-child {
+    padding-top: 0;
   }
 
-  .prose h3 {
-    @apply text-xl font-bold mt-8 mb-3 text-gray-900;
+  /* 구분선 */
+  .divider {
+    border: none;
+    border-top: 1px solid #EAEAEA;
+  }
+}
+
+/* ── 산문(Prose) ── 글 페이지 본문 전용 ── */
+@layer components {
+  .prose {
+    font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+    font-size: 18px;
+    line-height: 1.9;
+    letter-spacing: -0.01em;
+    color: #1A1A1A;
   }
 
   .prose p {
-    @apply leading-7 mb-4 text-gray-700;
+    margin: 0 0 1.5em;
   }
 
-  .prose ul {
-    @apply list-disc list-outside ml-6 mb-4 space-y-2;
+  .prose h2 {
+    font-family: 'Noto Serif KR', Georgia, serif;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+    color: #000;
+    margin: 64px 0 20px;
   }
 
-  .prose ol {
-    @apply list-decimal list-outside ml-6 mb-4 space-y-2;
+  .prose h3 {
+    font-family: 'Noto Serif KR', Georgia, serif;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+    color: #000;
+    margin: 48px 0 16px;
+  }
+
+  .prose h4 {
+    font-family: 'Noto Serif KR', Georgia, serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    margin: 32px 0 12px;
+  }
+
+  .prose ul, .prose ol {
+    padding-left: 1.5em;
+    margin: 0 0 1.5em;
   }
 
   .prose li {
-    @apply text-gray-700 leading-7;
+    margin-bottom: 0.6em;
+    line-height: 1.9;
   }
 
-  .prose strong {
-    @apply font-semibold text-gray-900;
+  .prose li > ul, .prose li > ol {
+    margin: 0.4em 0 0;
   }
 
-  .prose a {
-    @apply text-orange-600 hover:text-orange-700 underline;
-  }
-
+  /* 브런치식 blockquote — 좌측 3px 오렌지 보더만, 배경 없음, italic 없음 */
   .prose blockquote {
-    @apply border-l-4 border-orange-400 pl-4 italic text-gray-600 my-6;
+    border-left: 3px solid #C2410C;
+    padding: 4px 0 4px 20px;
+    margin: 32px 0;
+    font-style: normal;
+    color: #1A1A1A;
   }
 
-  .prose code {
-    @apply bg-gray-100 rounded px-1 py-0.5 text-sm font-mono text-gray-800;
+  .prose blockquote p {
+    margin: 0;
   }
 
+  /* 코드 블록 */
   .prose pre {
-    @apply bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto my-6;
+    background: #1A1A1A;
+    color: #F0F0F0;
+    border-radius: 8px;
+    padding: 20px 24px;
+    overflow-x: auto;
+    margin: 32px 0;
+    font-family: 'JetBrains Mono', Menlo, monospace;
+    font-size: 14px;
+    line-height: 1.7;
   }
 
   .prose pre code {
-    @apply bg-transparent p-0 text-gray-100;
+    background: none;
+    padding: 0;
+    color: inherit;
+    font-size: inherit;
+    border-radius: 0;
   }
 
+  /* 인라인 코드 */
+  .prose code {
+    font-family: 'JetBrains Mono', Menlo, monospace;
+    font-size: 15px;
+    background: #F7F7F7;
+    color: #C2410C;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  /* 이미지 */
+  .prose img {
+    width: 100%;
+    border-radius: 0;
+    margin: 32px 0;
+    display: block;
+  }
+
+  /* 링크 — 본문 색 유지, 얇은 underline, hover 시 오렌지 */
+  .prose a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: #B0B0B0;
+  }
+
+  .prose a:hover {
+    color: #C2410C;
+    text-decoration-color: #C2410C;
+  }
+
+  /* 테이블 */
   .prose table {
-    @apply w-full border-collapse my-6;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 32px 0;
+    font-size: 16px;
   }
 
   .prose th {
-    @apply bg-gray-100 border border-gray-300 px-4 py-2 text-left font-semibold;
+    background: #F7F7F7;
+    border-bottom: 2px solid #EAEAEA;
+    padding: 10px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.02em;
   }
 
   .prose td {
-    @apply border border-gray-300 px-4 py-2;
+    border-bottom: 1px solid #EAEAEA;
+    padding: 10px 16px;
+  }
+
+  /* hr */
+  .prose hr {
+    border: none;
+    border-top: 1px solid #EAEAEA;
+    margin: 48px 0;
+  }
+
+  /* strong */
+  .prose strong {
+    font-weight: 600;
+    color: #000;
   }
 }

@@ -2,9 +2,12 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
 import { getCollection } from 'astro:content';
+import { CATEGORY_CONFIG } from '../../utils/categories';
+import { getReadingTime } from '../../utils/reading-time';
 
 const allPosts = await getCollection('posts', ({ data }) => !data.draft);
 const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const currentPath = Astro.url.pathname;
 ---
 
 <BaseLayout
@@ -12,12 +15,40 @@ const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.
   description="고기석 블로그의 모든 글 목록. 자영업 운영, AI 자동화, 데이터 분석을 다룹니다."
   pageType="list"
 >
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-    <h1 class="text-3xl font-bold text-gray-900 mb-2">전체 글</h1>
-    <p class="text-gray-500 mb-8">총 {posts.length}편</p>
+  <div class="max-w-reading mx-auto px-5 md:px-0 pt-16 md:pt-20">
 
+    <!-- 제목 -->
+    <h1 class="font-serif font-bold text-[32px] md:text-[44px] text-black tracking-[-0.02em] leading-tight mb-8">
+      전체 글
+    </h1>
+
+    <!-- 카테고리 필터 -->
+    <nav class="flex flex-wrap items-center gap-x-5 gap-y-2 mb-8">
+      <a
+        href="/posts"
+        class={`font-sans font-medium text-[14px] no-underline pb-0.5 relative ${
+          currentPath === '/posts' || currentPath === '/posts/'
+            ? 'text-black border-b-2 border-black'
+            : 'text-ink-sub hover:text-black'
+        }`}
+      >
+        전체
+      </a>
+      {Object.entries(CATEGORY_CONFIG).map(([slug, config]) => (
+        <a
+          href={`/categories/${slug}`}
+          class="font-sans font-medium text-[14px] text-ink-sub hover:text-black no-underline"
+        >
+          {config.label}
+        </a>
+      ))}
+    </nav>
+
+    <hr class="divider mb-0" />
+
+    <!-- 글 목록 -->
     {posts.length > 0 ? (
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div>
         {posts.map((post) => (
           <PostCard
             title={post.data.title}
@@ -26,11 +57,12 @@ const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.
             slug={post.id.replace(/\.mdx?$/, '')}
             category={post.data.category}
             tags={post.data.tags}
+            readingTime={getReadingTime(post.body)}
           />
         ))}
       </div>
     ) : (
-      <p class="text-gray-500 text-center py-20">곧 첫 글이 올라옵니다.</p>
+      <p class="font-sans text-[15px] text-ink-sub py-12">곧 첫 글이 올라옵니다.</p>
     )}
   </div>
 </BaseLayout>

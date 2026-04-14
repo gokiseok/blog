@@ -2,21 +2,15 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import { getCollection } from 'astro:content';
-import { CATEGORY_LABELS } from '../content/config';
+import { CATEGORY_CONFIG } from '../utils/categories';
+import { getReadingTime } from '../utils/reading-time';
 
 const allPosts = await getCollection('posts', ({ data }) => !data.draft);
 const recentPosts = allPosts
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 6);
 
-const categories = Object.entries(CATEGORY_LABELS) as [string, string][];
-
-const categoryDescriptions: Record<string, string> = {
-  'gokiseok-bbq': '매장 운영기, 회식 가이드, 건대 맛집 정보',
-  'ai-business-lab': 'SaaS 개발 일지, 자동화 워크플로우, 프롬프트 엔지니어링',
-  'business-notes': '마케팅, 인력, 노무, 비용 — 자영업 실전',
-  'data-stories': '매출·객단가·광고 ROI 숫자 기반 분석',
-};
+const categories = Object.entries(CATEGORY_CONFIG);
 ---
 
 <BaseLayout
@@ -24,79 +18,82 @@ const categoryDescriptions: Record<string, string> = {
   description="건대입구역 통갈매기살 전문점 고기석 건대본점 운영기. 자영업 운영 실전, AI 자동화 개발기, 데이터 기반 분석을 씁니다."
   pageType="home"
 >
-  <!-- 히어로 섹션 -->
-  <section class="bg-gradient-to-br from-gray-900 to-gray-800 text-white py-20 px-4">
-    <div class="max-w-4xl mx-auto text-center">
-      <h1 class="text-4xl sm:text-5xl font-bold mb-6 leading-tight">
-        자영업 × AI × 데이터
-      </h1>
-      <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
-        건대입구역 통갈매기살 전문점 <strong class="text-orange-400">고기석 건대본점</strong>을 운영하면서<br class="hidden sm:block" />
-        AI 도구를 직접 만들고, 데이터로 사업을 분석합니다.<br />
-        현장에서 배운 것들을 여기에 씁니다.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-3 justify-center mt-8">
-        <a
-          href="/posts"
-          class="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg no-underline transition-colors"
-        >
-          전체 글 보기
-        </a>
-        <a
-          href="/about"
-          class="px-6 py-3 border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold rounded-lg no-underline transition-colors"
-        >
-          블로그 소개
-        </a>
-      </div>
-    </div>
+  <!-- 히어로 -->
+  <section class="max-w-reading mx-auto px-5 md:px-0 pt-24 md:pt-36 pb-16 md:pb-20">
+    <p
+      class="font-sans font-medium text-[13px] text-accent uppercase tracking-[0.1em] mb-6"
+    >
+      AI 사장 고기석
+    </p>
+    <h1
+      class="font-serif font-bold text-[34px] md:text-[52px] text-black leading-[1.35] tracking-[-0.02em] mb-6 whitespace-pre-line"
+    >
+      {"자영업과 AI 사이에서,\n기록합니다"}
+    </h1>
+    <p class="font-sans text-[16px] text-ink-sub leading-[1.7] max-w-[560px]">
+      건대 통갈매기살 전문점 고기석 건대본점을 운영하며,<br class="hidden md:block" />
+      자영업자에게 도움이 되는 AI 도구를 만듭니다.
+    </p>
   </section>
 
-  <!-- 카테고리 바로가기 -->
-  <section class="py-12 px-4 bg-gray-50">
-    <div class="max-w-6xl mx-auto">
-      <h2 class="text-2xl font-bold text-gray-900 mb-6">카테고리</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {categories.map(([slug, label]) => {
-          return (
-            <a
-              href={`/categories/${slug}`}
-              class="block p-5 bg-white border border-gray-200 rounded-lg hover:border-orange-300 hover:shadow-md transition-all no-underline"
-            >
-              <h3 class="font-bold text-gray-900 mb-2">{label}</h3>
-              <p class="text-sm text-gray-500 leading-relaxed">{categoryDescriptions[slug]}</p>
-            </a>
-          );
-        })}
-      </div>
-    </div>
-  </section>
+  <div class="max-w-reading mx-auto px-5 md:px-0">
+    <hr class="divider" />
+  </div>
 
   <!-- 최근 글 -->
-  <section class="py-12 px-4">
-    <div class="max-w-6xl mx-auto">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold text-gray-900">최근 글</h2>
-        <a href="/posts" class="text-sm text-orange-600 hover:text-orange-700 no-underline">
-          전체 보기 →
-        </a>
+  <section class="max-w-reading mx-auto px-5 md:px-0 pt-16 md:pt-20">
+    <h2 class="font-serif font-bold text-[22px] text-black tracking-[-0.02em] mb-10">
+      최근 글
+    </h2>
+
+    {recentPosts.length > 0 ? (
+      <div>
+        {recentPosts.map((post) => (
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            slug={post.id.replace(/\.mdx?$/, '')}
+            category={post.data.category}
+            tags={post.data.tags}
+            readingTime={getReadingTime(post.body)}
+          />
+        ))}
       </div>
-      {recentPosts.length > 0 ? (
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {recentPosts.map((post) => (
-            <PostCard
-              title={post.data.title}
-              description={post.data.description}
-              pubDate={post.data.pubDate}
-              slug={post.id.replace(/\.mdx?$/, '')}
-              category={post.data.category}
-              tags={post.data.tags}
-            />
-          ))}
-        </div>
-      ) : (
-        <p class="text-gray-500 text-center py-12">곧 첫 글이 올라옵니다.</p>
-      )}
+    ) : (
+      <p class="font-sans text-[15px] text-ink-sub py-12">곧 첫 글이 올라옵니다.</p>
+    )}
+
+    <div class="pt-8">
+      <a href="/posts" class="font-sans font-medium text-[15px] text-accent no-underline hover:underline">
+        전체 글 보기 →
+      </a>
+    </div>
+  </section>
+
+  <!-- 카테고리 -->
+  <section class="max-w-reading mx-auto px-5 md:px-0 pt-20 md:pt-24 pb-4">
+    <hr class="divider mb-16" />
+    <h2 class="font-serif font-bold text-[22px] text-black tracking-[-0.02em] mb-8">
+      카테고리
+    </h2>
+    <div class="flex flex-col">
+      {categories.map(([slug, config]) => (
+        <a
+          href={`/categories/${slug}`}
+          class="group py-5 border-b border-[#EAEAEA] last:border-0 no-underline"
+        >
+          <p
+            class="font-serif font-bold text-[20px] leading-snug tracking-[-0.02em] mb-1 group-hover:underline decoration-1"
+            style={`color: ${config.color}`}
+          >
+            {config.label}
+          </p>
+          <p class="font-sans text-[15px] text-ink-sub leading-relaxed">
+            {config.description}
+          </p>
+        </a>
+      ))}
     </div>
   </section>
 </BaseLayout>
