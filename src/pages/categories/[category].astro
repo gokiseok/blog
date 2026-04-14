@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { CATEGORY_LABELS } from '../../content/config';
+import type { CategorySlug } from '../../content/config';
+
+export async function getStaticPaths() {
+  const slugs = Object.keys(CATEGORY_LABELS) as CategorySlug[];
+  return slugs.map((category) => ({ params: { category } }));
+}
+
+const { category } = Astro.params as { category: CategorySlug };
+const categoryLabel = CATEGORY_LABELS[category];
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const posts = allPosts
+  .filter((post) => post.data.category === category)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout
+  title={`${categoryLabel} - 고기석 블로그`}
+  description={`${categoryLabel} 카테고리의 모든 글 목록입니다. 오기석의 블로그.`}
+  pageType="category"
+>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div class="mb-8">
+      <a href="/posts" class="text-sm text-gray-500 hover:text-gray-700 no-underline">← 전체 글</a>
+      <h1 class="text-3xl font-bold text-gray-900 mt-2 mb-1">{categoryLabel}</h1>
+      <p class="text-gray-500">총 {posts.length}편</p>
+    </div>
+
+    {posts.length > 0 ? (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {posts.map((post) => (
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            slug={post.id.replace(/\.mdx?$/, '')}
+            category={post.data.category}
+            tags={post.data.tags}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="text-gray-500 text-center py-20">이 카테고리에 아직 글이 없습니다.</p>
+    )}
+  </div>
+</BaseLayout>

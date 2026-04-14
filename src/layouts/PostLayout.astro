@@ -1,0 +1,162 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import JsonLd from '../components/JsonLd.astro';
+import PostCard from '../components/PostCard.astro';
+import { CATEGORY_LABELS } from '../content/config';
+import type { CategorySlug } from '../content/config';
+import { getCollection } from 'astro:content';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  heroImage?: string;
+  category: CategorySlug;
+  tags: string[];
+  schemaType: 'Article' | 'Restaurant' | 'HowTo' | 'FAQPage';
+}
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  category,
+  tags,
+  schemaType,
+} = Astro.props;
+
+const categoryLabel = CATEGORY_LABELS[category];
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// 관련 글 (같은 카테고리, 최신 2개)
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const relatedPosts = allPosts
+  .filter((p) => p.data.category === category && p.data.title !== title)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 2);
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <BaseHead
+      title={title}
+      description={description}
+      image={heroImage}
+      type="article"
+      pubDate={pubDate}
+      canonicalURL={canonicalURL}
+    />
+    <JsonLd
+      pageType="post"
+      title={title}
+      description={description}
+      url={canonicalURL.href}
+      pubDate={pubDate}
+      updatedDate={updatedDate}
+      category={category}
+      schemaType={schemaType}
+    />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Header />
+    <main class="flex-1">
+      <article class="max-w-prose mx-auto px-4 sm:px-6 py-12">
+        <!-- 카테고리 & 날짜 -->
+        <div class="flex items-center gap-2 mb-4 text-sm">
+          <a
+            href={`/categories/${category}`}
+            class="text-orange-600 bg-orange-50 px-2 py-1 rounded font-medium no-underline hover:bg-orange-100"
+          >
+            {categoryLabel}
+          </a>
+          <span class="text-gray-400">
+            <FormattedDate date={pubDate} />
+          </span>
+          {updatedDate && (
+            <span class="text-gray-400 text-xs">
+              (수정: <FormattedDate date={updatedDate} />)
+            </span>
+          )}
+        </div>
+
+        <!-- 제목 -->
+        <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-4">
+          {title}
+        </h1>
+
+        <!-- 설명 -->
+        <p class="text-gray-500 text-lg leading-relaxed mb-6">
+          {description}
+        </p>
+
+        <!-- 태그 -->
+        <div class="flex flex-wrap gap-1 mb-8 pb-8 border-b border-gray-200">
+          {tags.map((tag) => (
+            <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+              #{tag}
+            </span>
+          ))}
+        </div>
+
+        <!-- 히어로 이미지 -->
+        {heroImage && (
+          <img
+            src={heroImage}
+            alt={title}
+            class="w-full rounded-lg mb-8 object-cover aspect-video"
+          />
+        )}
+
+        <!-- 본문 -->
+        <div class="prose max-w-none">
+          <slot />
+        </div>
+
+        <!-- 저자 카드 -->
+        <div class="mt-12 pt-8 border-t border-gray-200">
+          <div class="flex items-start gap-4 p-6 bg-gray-50 rounded-lg">
+            <div class="flex-1">
+              <p class="font-bold text-gray-900 mb-1">오기석</p>
+              <p class="text-sm text-gray-600 leading-relaxed">
+                고기석 건대본점 대표 · SaaS 개발자 · 유튜버 "AI 사장 고기석".
+                연세대 응용통계학 출신, 삼성 빅데이터센터를 거쳐 자영업과 AI 자동화로 전환했습니다.
+              </p>
+              <div class="flex gap-3 mt-2">
+                <a href="/about" class="text-xs text-orange-600 hover:text-orange-700 no-underline">프로필 보기</a>
+                <a href="https://bbq.gokiseok.com" target="_blank" rel="noopener noreferrer" class="text-xs text-orange-600 hover:text-orange-700 no-underline">고기석 건대본점</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 관련 글 -->
+        {relatedPosts.length > 0 && (
+          <div class="mt-10">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">관련 글</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {relatedPosts.map((post) => (
+                <PostCard
+                  title={post.data.title}
+                  description={post.data.description}
+                  pubDate={post.data.pubDate}
+                  slug={post.id.replace(/\.mdx?$/, '')}
+                  category={post.data.category}
+                  tags={post.data.tags}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+      </article>
+    </main>
+    <Footer />
+  </body>
+</html>

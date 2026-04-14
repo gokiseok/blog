@@ -1,0 +1,86 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply text-gray-900 bg-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+  }
+
+  a {
+    @apply text-orange-600 hover:text-orange-700 transition-colors;
+  }
+
+  /* Prose styles for blog posts */
+  .prose h2 {
+    @apply text-2xl font-bold mt-10 mb-4 text-gray-900;
+  }
+
+  .prose h3 {
+    @apply text-xl font-bold mt-8 mb-3 text-gray-900;
+  }
+
+  .prose p {
+    @apply leading-7 mb-4 text-gray-700;
+  }
+
+  .prose ul {
+    @apply list-disc list-outside ml-6 mb-4 space-y-2;
+  }
+
+  .prose ol {
+    @apply list-decimal list-outside ml-6 mb-4 space-y-2;
+  }
+
+  .prose li {
+    @apply text-gray-700 leading-7;
+  }
+
+  .prose strong {
+    @apply font-semibold text-gray-900;
+  }
+
+  .prose a {
+    @apply text-orange-600 hover:text-orange-700 underline;
+  }
+
+  .prose blockquote {
+    @apply border-l-4 border-orange-400 pl-4 italic text-gray-600 my-6;
+  }
+
+  .prose code {
+    @apply bg-gray-100 rounded px-1 py-0.5 text-sm font-mono text-gray-800;
+  }
+
+  .prose pre {
+    @apply bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto my-6;
+  }
+
+  .prose pre code {
+    @apply bg-transparent p-0 text-gray-100;
+  }
+
+  .prose table {
+    @apply w-full border-collapse my-6;
+  }
+
+  .prose th {
+    @apply bg-gray-100 border border-gray-300 px-4 py-2 text-left font-semibold;
+  }
+
+  .prose td {
+    @apply border border-gray-300 px-4 py-2;
+  }
+}

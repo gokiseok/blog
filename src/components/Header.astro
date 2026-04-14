@@ -1,0 +1,82 @@
+---
+import { CATEGORY_LABELS } from '../content/config';
+
+const categories = Object.entries(CATEGORY_LABELS) as [string, string][];
+const currentPath = Astro.url.pathname;
+---
+
+<header class="border-b border-gray-200 bg-white sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href="/" class="flex items-center no-underline">
+        <span class="text-xl font-bold text-gray-900 hover:text-orange-600 transition-colors">
+          고기석 블로그
+        </span>
+      </a>
+
+      <!-- Desktop nav -->
+      <nav class="hidden md:flex items-center gap-1">
+        {categories.map(([slug, label]) => (
+          <a
+            href={`/categories/${slug}`}
+            class={`px-3 py-2 text-sm rounded-md transition-colors no-underline ${
+              currentPath.includes(slug)
+                ? 'text-orange-600 bg-orange-50 font-medium'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+            }`}
+          >
+            {label}
+          </a>
+        ))}
+        <a
+          href="/about"
+          class={`px-3 py-2 text-sm rounded-md transition-colors no-underline ${
+            currentPath === '/about'
+              ? 'text-orange-600 bg-orange-50 font-medium'
+              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+          }`}
+        >
+          About
+        </a>
+      </nav>
+
+      <!-- Mobile menu button -->
+      <button
+        id="mobile-menu-btn"
+        class="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+        aria-label="메뉴 열기"
+      >
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile nav -->
+    <div id="mobile-menu" class="hidden md:hidden pb-4">
+      {categories.map(([slug, label]) => (
+        <a
+          href={`/categories/${slug}`}
+          class="block px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md no-underline"
+        >
+          {label}
+        </a>
+      ))}
+      <a
+        href="/about"
+        class="block px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md no-underline"
+      >
+        About
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  btn?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+  });
+</script>

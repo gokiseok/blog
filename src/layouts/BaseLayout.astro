@@ -1,0 +1,46 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import JsonLd from '../components/JsonLd.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  type?: 'website' | 'article';
+  pageType?: 'home' | 'about' | 'post' | 'category' | 'list';
+  canonicalURL?: string;
+}
+
+const {
+  title,
+  description,
+  image,
+  type = 'website',
+  pageType = 'list',
+  canonicalURL,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <BaseHead
+      title={title}
+      description={description}
+      image={image}
+      type={type}
+      canonicalURL={canonicalURL}
+    />
+    <JsonLd pageType={pageType} title={title} description={description} url={canonicalURL ?? Astro.url.href} />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Header />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

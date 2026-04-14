@@ -1,0 +1,118 @@
+---
+import type { CategorySlug } from '../content/config';
+
+interface Props {
+  pageType: 'home' | 'about' | 'post' | 'category' | 'list';
+  title?: string;
+  description?: string;
+  url?: string;
+  pubDate?: Date;
+  updatedDate?: Date;
+  category?: CategorySlug;
+  schemaType?: 'Article' | 'Restaurant' | 'HowTo' | 'FAQPage';
+}
+
+const {
+  pageType,
+  title,
+  description,
+  url = Astro.url.href,
+  pubDate,
+  updatedDate,
+  category,
+  schemaType = 'Article',
+} = Astro.props;
+
+const siteUrl = 'https://blog.gokiseok.com';
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: '오기석',
+  alternateName: 'AI 사장 고기석',
+  jobTitle: '고기석 건대본점 대표 / SaaS 개발자',
+  alumniOf: [
+    { '@type': 'CollegeOrUniversity', name: '연세대학교' },
+  ],
+  worksFor: {
+    '@type': 'Restaurant',
+    name: '고기석 건대본점',
+    url: 'https://bbq.gokiseok.com',
+  },
+  url: `${siteUrl}/about`,
+};
+
+const restaurantSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Restaurant',
+  name: '고기석 건대본점',
+  servesCuisine: 'Korean BBQ',
+  priceRange: '₩₩',
+  url: 'https://bbq.gokiseok.com',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: '광진구',
+    addressRegion: '서울',
+    addressCountry: 'KR',
+    // TODO: streetAddress, postalCode
+  },
+  // TODO: geo, openingHoursSpecification, telephone
+  hasMenu: 'https://bbq.gokiseok.com',
+  acceptsReservations: true,
+  publicAccess: true,
+  founder: { '@type': 'Person', name: '오기석' },
+};
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: '고기석 블로그',
+  url: siteUrl,
+  description: '자영업 × AI × 데이터 — 오기석의 블로그',
+  author: {
+    '@type': 'Person',
+    name: '오기석',
+  },
+};
+
+function buildArticleSchema() {
+  const base: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': schemaType === 'HowTo' ? 'HowTo' : schemaType === 'FAQPage' ? 'FAQPage' : 'Article',
+    headline: title,
+    description,
+    url,
+    author: {
+      '@type': 'Person',
+      name: '오기석',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: '고기석 블로그',
+      url: siteUrl,
+    },
+  };
+  if (pubDate) base.datePublished = pubDate.toISOString();
+  if (updatedDate) base.dateModified = updatedDate.toISOString();
+  return base;
+}
+
+let schemas: unknown[] = [];
+
+if (pageType === 'home') {
+  schemas = [websiteSchema, personSchema, restaurantSchema];
+} else if (pageType === 'about') {
+  schemas = [personSchema];
+} else if (pageType === 'post') {
+  schemas = [buildArticleSchema()];
+  if (category === 'gokiseok-bbq') {
+    schemas.push(restaurantSchema);
+  }
+} else if (pageType === 'list' || pageType === 'category') {
+  schemas = [websiteSchema];
+}
+---
+
+{schemas.map((schema) => (
+  <script type="application/ld+json" set:html={JSON.stringify(schema, null, 0)} />
+))}
