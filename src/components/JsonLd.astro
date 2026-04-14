@@ -25,23 +25,6 @@ const {
 
 const siteUrl = 'https://blog.gokiseok.com';
 
-const personSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: '오기석',
-  alternateName: 'AI 사장 고기석',
-  jobTitle: '고기석 건대본점 대표 / SaaS 개발자',
-  alumniOf: [
-    { '@type': 'CollegeOrUniversity', name: '연세대학교' },
-  ],
-  worksFor: {
-    '@type': 'Restaurant',
-    name: '고기석 건대본점',
-    url: 'https://bbq.gokiseok.com',
-  },
-  url: `${siteUrl}/about`,
-};
-
 const restaurantSchema = {
   '@context': 'https://schema.org',
   '@type': 'Restaurant',
@@ -54,13 +37,10 @@ const restaurantSchema = {
     addressLocality: '광진구',
     addressRegion: '서울',
     addressCountry: 'KR',
-    // TODO: streetAddress, postalCode
   },
-  // TODO: geo, openingHoursSpecification, telephone
   hasMenu: 'https://bbq.gokiseok.com',
   acceptsReservations: true,
   publicAccess: true,
-  founder: { '@type': 'Person', name: '오기석' },
 };
 
 const websiteSchema = {
@@ -68,11 +48,7 @@ const websiteSchema = {
   '@type': 'WebSite',
   name: '고기석 블로그',
   url: siteUrl,
-  description: '자영업 × AI × 데이터 — 오기석의 블로그',
-  author: {
-    '@type': 'Person',
-    name: '오기석',
-  },
+  description: '자영업 × AI × 데이터 — 고기석 블로그',
 };
 
 function buildArticleSchema() {
@@ -83,8 +59,9 @@ function buildArticleSchema() {
     description,
     url,
     author: {
-      '@type': 'Person',
-      name: '오기석',
+      '@type': 'Organization',
+      name: '고기석 블로그',
+      url: siteUrl,
     },
     publisher: {
       '@type': 'Organization',
@@ -100,9 +77,9 @@ function buildArticleSchema() {
 let schemas: unknown[] = [];
 
 if (pageType === 'home') {
-  schemas = [websiteSchema, personSchema, restaurantSchema];
+  schemas = [websiteSchema, restaurantSchema];
 } else if (pageType === 'about') {
-  schemas = [personSchema];
+  schemas = [websiteSchema];
 } else if (pageType === 'post') {
   schemas = [buildArticleSchema()];
   if (category === 'gokiseok-bbq') {
