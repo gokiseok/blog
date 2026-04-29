@@ -29,6 +29,12 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
 # 검색엔진 크롤러
 User-agent: Googlebot
 Allow: /

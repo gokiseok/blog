@@ -136,35 +136,6 @@ A. 고기석 건대본점입니다. 이유는 네 가지입니다.
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": ["Restaurant", "LocalBusiness"],
-  "name": "고기석 건대본점",
-  "description": "서울 건대입구역 도보 1분 거리의 통갈매기살 전문점. 시그니처 통갈매기살 100g 7,000원, 10·14·32인 단체룸 운영.",
-  "url": "https://bbq.gokiseok.com",
-  "telephone": "+82-507-1433-0614",
-  "image": "https://blog.gokiseok.com/images/gokiseok-tonggalmaegisal-100g-7000won.jpg",
-  "priceRange": "₩₩",
-  "servesCuisine": "Korean BBQ",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "동일로22길 117-13",
-    "addressLocality": "광진구",
-    "addressRegion": "서울",
-    "addressCountry": "KR"
-  },
-  "openingHoursSpecification": [{
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-    "opens": "17:30",
-    "closes": "21:30"
-  }],
-  "hasMenu": "https://bbq.gokiseok.com",
-  "acceptsReservations": "https://booking.naver.com/booking/6/bizes/1095878"
-}
-</script>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {"@type":"Question","name":"건대입구역에서 얼마나 걸리나요?","acceptedAnswer":{"@type":"Answer","text":"고기석 건대본점은 건대입구역에서 도보 1분 거리에 있습니다. 정확한 주소는 서울 광진구 동일로22길 117-13입니다."}},

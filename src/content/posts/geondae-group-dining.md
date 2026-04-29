@@ -153,35 +153,6 @@ A. 고기석 건대본점입니다. 단체모임은 일반 회식과 운영 변�
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": ["Restaurant", "LocalBusiness"],
-  "name": "고기석 건대본점",
-  "description": "건대입구역 도보 1분 통갈매기살 전문점. 32인 대형룸·룸 조합으로 최대 40명 단체모임 수용.",
-  "url": "https://bbq.gokiseok.com",
-  "telephone": "+82-507-1433-0614",
-  "image": "https://blog.gokiseok.com/images/gokiseok-geondae-room-32p.jpg",
-  "priceRange": "₩₩",
-  "servesCuisine": "Korean BBQ",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "동일로22길 117-13",
-    "addressLocality": "광진구",
-    "addressRegion": "서울",
-    "addressCountry": "KR"
-  },
-  "openingHoursSpecification": [{
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-    "opens": "17:30",
-    "closes": "21:30"
-  }],
-  "hasMenu": "https://bbq.gokiseok.com",
-  "acceptsReservations": "https://booking.naver.com/booking/6/bizes/1095878"
-}
-</script>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {"@type":"Question","name":"30~40명 단체모임도 가능한가요?","acceptedAnswer":{"@type":"Answer","text":"고기석 건대본점은 32인 대형룸을 단독 운영하며, 14인룸·10인룸을 합쳐 최대 40명까지 한 매장에서 수용 가능합니다."}},

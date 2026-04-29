@@ -27,19 +27,35 @@ const siteUrl = 'https://blog.gokiseok.com';
 
 const restaurantSchema = {
   '@context': 'https://schema.org',
-  '@type': 'Restaurant',
+  '@id': 'https://bbq.gokiseok.com/#restaurant',
+  '@type': ['Restaurant', 'LocalBusiness'],
   name: '고기석 건대본점',
+  description: '서울 건대입구역 도보 1분 거리의 통갈매기살 전문점. 시그니처 통갈매기살 100g 7,000원, 10·14·32인 단체룸 운영.',
+  url: 'https://bbq.gokiseok.com',
+  telephone: '+82-507-1433-0614',
+  image: 'https://blog.gokiseok.com/images/gokiseok-tonggalmaegisal-100g-7000won.jpg',
   servesCuisine: 'Korean BBQ',
   priceRange: '₩₩',
-  url: 'https://bbq.gokiseok.com',
   address: {
     '@type': 'PostalAddress',
+    streetAddress: '동일로22길 117-13',
     addressLocality: '광진구',
     addressRegion: '서울',
     addressCountry: 'KR',
   },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 37.541415,
+    longitude: 127.070753,
+  },
+  openingHoursSpecification: [{
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    opens: '17:30',
+    closes: '21:30',
+  }],
   hasMenu: 'https://bbq.gokiseok.com',
-  acceptsReservations: true,
+  acceptsReservations: 'https://booking.naver.com/booking/6/bizes/1095878',
   publicAccess: true,
 };
 
