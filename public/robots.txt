@@ -26,6 +26,9 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
+User-agent: Applebot-Extended
+Allow: /
+
 # 검색엔진 크롤러
 User-agent: Googlebot
 Allow: /
